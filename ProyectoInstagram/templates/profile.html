@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de {{ user.nombre }}</title>
+    <style>
+        /* Estilo general */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Contenedor principal */
+        .profile-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Cabecera del perfil */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .profile-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .profile-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
+        .profile-info h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .profile-info p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .profile-info button {
+            background-color: #3897f0;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .profile-info button:hover {
+            background-color: #2d82d7;
+        }
+
+        /* Estadísticas del perfil */
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 10px;
+        }
+
+        .profile-stats div {
+            text-align: center;
+        }
+
+        .profile-stats div h2 {
+            margin: 0;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .profile-stats div p {
+            margin: 0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Galería de publicaciones */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .gallery-item {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-item .likes {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        /* Formulario para editar perfil */
+        .edit-profile-form {
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .edit-profile-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .edit-profile-form select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .edit-profile-form button {
+            background-color: #3897f0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .edit-profile-form button:hover {
+            background-color: #2d82d7;
+        }
+
+        /* Estilo para el botón */
+        .regresar-boton {
+            background-color: #3897f0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .regresar-boton:hover {
+            background-color: #3079d4;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="feed">
+        <button onclick="goToProfile()">Feed</button>
+    </div>
+    <div class="profile-container">
+
+        <!-- Cabecera del perfil -->
+        <div class="profile-header">
+            <div class="profile-photo">
+                <img id="profile-photo" src="https://via.placeholder.com/150" alt="Foto de perfil">
+            </div>
+            <div class="profile-info">
+                <h1 id="profile-name">Perfil de {{ user.nombre }}</h1>
+                <p id="profile-location">📍 {{ user.get('ciudad', 'Ciudad no especificada') }}, {{ user.get('pais', 'País no especificado') }}</p>
+                <p id="profile-description">🎯 Descripción: {{ user.get('descripcion', 'No disponible') }}</p>
+                <p id="profile-preferencias">🎨 Preferencias: {{ user.get('preferencias', 'No especificados') }}</p>
+                <p id="profile-birthdate">📅 Fecha de Nacimiento: {{ user.get('fecha_nacimiento', 'No disponible') }}</p>
+                <p id="profile-age">🧑 Edad: {{ user.get('edad', 'No especificada') }}</p>
+                <p id="profile-phone">📞 Celular: {{ user.get('telefono', 'No disponible') }}</p>
+                <p id="profile-birthplace">🏠 Lugar de nacimiento: {{ user.get('birthplace') }}</p>
+                <p id="profile-gender">🧑‍🤝‍🧑 Sexo: {{ user.get('sexo') }}</p>
+                <p id="profile-career">🎓 Carrera: {{ user.get('carrera', 'No especificada') }}</p>
+                <p id="profile-social">🌐 Red social: {{ user.get('red_social', 'No disponible') }}</p>
+                <p id="profile-gmail">📧 Correo electrónico: {{ user.get('correo', 'No disponible') }}</p>
+
+                <!-- Si es tu propio perfil, muestra el botón para editar el perfil -->
+                {% if is_own_profile %}
+                    <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">Editar perfil</a>
+                {% endif %}
+
+                <!-- Si no es tu propio perfil, muestra el botón para seguir o dejar de seguir -->
+                {% if not is_own_profile %}
+                    <form method="POST" action="{{ url_for('toggle_follow', user_id=user['idInformacionPersona']) }}">
+                        {% if is_following %}
+                            <button type="submit" class="btn btn-danger">Dejar de seguir</button>
+                        {% else %}
+                            <button type="submit" class="btn btn-success">Seguir</button>
+                        {% endif %}
+                    </form>
+
+                    <!-- Si ambos se siguen mutuamente, muestra que son amigos -->
+                    {% if is_following and is_followed_back %}
+                        <p>¡Son amigos ahora!</p>
+                    {% endif %}
+                {% endif %}
+
+
+            </div>
+        </div>
+
+        <!-- Formulario para editar perfil -->
+        <div class="edit-profile-form" style="display:none;">
+            <form method="POST" action="{{ url_for('update_profile') }}" enctype="multipart/form-data">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="{{ user['nombre'] }}" required><br><br>
+
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" value="{{ user['apellido'] }}" required><br><br>
+
+                <label for="correo">Correo:</label>
+                <input type="email" id="correo" name="correo" value="{{ user['correo'] }}" required><br><br>
+
+                <label for="telefono">Teléfono:</label>
+                <input type="tel" id="telefono" name="telefono" value="{{ user['telefono'] }}" required><br><br>
+
+                <label for="preferencias">Preferencias:</label>
+                <input type="text" id="preferencias" name="preferencias" value="{{ user.get('preferencias', '') }}">
+
+                <textarea id="edit-descripcion" name="description" placeholder="Descripción">{{ user['descripcion'] }}</textarea>
+
+                <input type="text" id="edit-location" name="location" placeholder="Ubicación" value="{{ user['ciudad'] }}">
+                <input type="date" id="edit-birthdate" name="birthdate" placeholder="Fecha de nacimiento" value="{{ user['fecha_nacimiento'] }}">
+                <input type="number" id="edit-age" name="age" placeholder="Edad" value="{{ user['edad'] }}">
+                <input type="text" id="edit-birthplace" name="birthplace" placeholder="Lugar de nacimiento" value="{{ user['birthplace'] }}">
+
+                <label for="sexo">Sexo:</label>
+                <select id="edit-sexo" name="sexo">
+                    <option value="M" {% if user['sexo'] == 'M' %}selected{% endif %}>M</option>
+                    <option value="F" {% if user['sexo'] == 'F' %}selected{% endif %}>F</option>
+                </select>
+
+                <label for="carrera">Carrera:</label>
+                <input type="text" id="edit-carrera" name="carrera" placeholder="Carrera" value="{{ user['carrera'] }}">
+
+                <label for="red_social">Red Social:</label>
+                <input type="text" id="edit-red_social" name="red_social" placeholder="Red Social" value="{{ user['red_social'] }}">
+
+                <input type="file" id="edit-photo" name="photo" accept="image/*">
+                <button type="submit">Guardar cambios</button>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        // Mostrar el formulario de edición
+        document.getElementById('edit-profile-btn').addEventListener('click', function() {
+            document.querySelector('.edit-profile-form').style.display = 'block';
+        });
+
+        // Función para redirigir al feed
+        function goToProfile() {
+            window.location.href = "/feed";
+        }
+
+    // Guardar los cambios en el perfil
+    document.getElementById('save-profile-btn').addEventListener('click', function() {
+        // Guardar los datos en el perfil
+        const username = document.getElementById('edit-username').value;
+        const location = document.getElementById('edit-location').value;
+        const description = document.getElementById('edit-description').value;
+        const hobbies = document.getElementById('edit-hobbies').value;
+        const birthdate = document.getElementById('edit-birthdate').value;
+        const age = document.getElementById('edit-age').value;
+        const phone = document.getElementById('edit-phone').value;
+        const birthplace = document.getElementById('edit-birthplace').value;
+        const gender = document.getElementById('edit-gender').value;
+        const career = document.getElementById('edit-career').value;
+        const social = document.getElementById('edit-social').value;
+        const gmail = document.getElementById('edit-gmail').value;
+                   // Actualizar el perfil en la interfaz
+        document.getElementById('profile-name').innerText = 'Perfil de ' + username;
+        document.getElementById('profile-location').innerText = location;
+        document.getElementById('profile-description').innerText = description;
+        document.getElementById('profile-hobbies').innerText = hobbies;
+        document.getElementById('profile-birthdate').innerText = birthdate;
+        document.getElementById('profile-age').innerText = age;
+        document.getElementById('profile-phone').innerText = phone;
+        document.getElementById('profile-birthplace').innerText = birthplace;
+        document.getElementById('profile-gender').innerText = gender;
+        document.getElementById('profile-career').innerText = career;
+        document.getElementById('profile-social').innerText = social;
+        document.getElementById('profile-gmail').innerText = gmail;
+
+
+            // Ocultar el formulario de edición
+            document.querySelector('.edit-profile-form').style.display = 'none';
+        });
+                document.getElementById('edit-profile-btn').addEventListener('click', function() {
+            document.querySelector('.edit-profile-form').style.display = 'block';
+        });
+
+        document.getElementById('save-profile-btn').addEventListener('click', function() {
+            const fileInput = document.getElementById('edit-photo');
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('profile-photo').src = e.target.result;
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+            // Aquí se guardan los demás cambios y se actualizan en el perfil.
+            alert("Perfil actualizado!");
+            document.querySelector('.edit-profile-form').style.display = 'none';
+        });
+    </script>
+    </body>
+</html>

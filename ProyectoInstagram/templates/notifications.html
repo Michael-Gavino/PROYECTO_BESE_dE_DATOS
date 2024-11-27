@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notificaciones</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+    <div class="navbar">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Instagram_logo_2022.svg/800px-Instagram_logo_2022.svg.png" alt="Instagram Logo">
+        <form action="{{ url_for('search') }}" method="get">
+            <input type="text" name="query" placeholder="Buscar usuario...">
+            <button type="submit">Buscar</button>
+        </form>
+        <button onclick="window.location.href='/create'">Crear</button>
+        <button onclick="window.location.href='/notifications'">Notificaciones</button>
+        <button onclick="window.location.href='/profile/Usuario 1'">Perfil</button>
+    </div>
+
+    <h1>Notificaciones</h1>
+    <ul>
+        {% for notification in notifications %}
+            <li>{{ notification }}</li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>

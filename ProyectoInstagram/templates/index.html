@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Instagram</title>
+    <style>
+        /* Estilo base */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #313131;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Imagen de fondo */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Coloca la imagen detrás de todos los elementos */
+            background-image: url('{{ url_for('static', filename='images/UPCH.webp') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: opacity(0.6); /* Añade transparencia a la imagen */
+        }
+
+        /* Contenedor principal */
+        .container {
+            display: flex;
+            max-width: 1000px;
+            width: 70%;
+            height: 70vh;
+            margin: auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+            box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* Sección del carrusel */
+        .image-section {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .image-section .carousel {
+            width: 95%;
+            height: 95%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .carousel img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            animation: fade 12s infinite;
+            border-radius: 10px;
+        }
+
+        .carousel img:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .carousel img:nth-child(2) {
+            animation-delay: 4s;
+        }
+
+        .carousel img:nth-child(3) {
+            animation-delay: 8s;
+        }
+
+        @keyframes fade {
+            0% {
+                opacity: 0;
+            }
+            8% {
+                opacity: 1;
+            }
+            42% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        /* Sección del formulario */
+        .form-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center; /* Centrado vertical */
+        }
+
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #fafafa;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #a80505;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-button:hover {
+            background-color: #880b0b;
+        }
+
+        .register-link {
+            font-size: 14px;
+            color: #3897f0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+            color: #880b0b;
+        }
+    </style>
+</head>
+<body>
+    <!-- Imagen de fondo -->
+    <div class="background-image"></div>
+
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Carrusel de imágenes -->
+        <div class="image-section">
+            <div class="carousel">
+                <img src="{{ url_for('static', filename='images/estudiante.jpeg') }}" alt="Estudiantes 1">
+                <img src="{{ url_for('static', filename='images/estudiante1.png') }}" alt="Estudiantes 2">
+                <img src="{{ url_for('static', filename='images/estudiantes.jpeg') }}" alt="Estudiantes 3">
+            </div>
+        </div>
+
+        <!-- Sección del formulario -->
+        <div class="form-section">
+            <img src="{{ url_for('static', filename='images/CayetanoConnect.png') }}" alt="Logo" class="logo">
+            <form action="/login" method="POST">
+                <input type="email" name="email" placeholder="Correo electrónico" required>
+                <input type="text" name="phone" placeholder="Número de celular" required>
+                <button type="submit" class="login-button">Iniciar Sesión</button>
+            </form>
+            <p>¿No tienes cuenta? <a href="/register" class="register-link">Regístrate</a></p>
+        </div>
+    </div>
+</body>
+</html>

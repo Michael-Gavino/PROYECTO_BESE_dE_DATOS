@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar perfil</title>
+    <style>
+        /* Estilo general */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .edit-profile-container {
+            width: 100%;
+            max-width: 600px;
+            background-color: white;
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            background-color: #3897f0;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #2d82d7;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="edit-profile-container">
+        <h1>Editar perfil</h1>
+        <input type="text" id="edit-username" placeholder="Nuevo nombre de usuario">
+        <input type="text" id="edit-location" placeholder="Nueva ubicación">
+        <input type="text" id="edit-description" placeholder="Nueva descripción">
+        <button id="save-profile-btn">Guardar cambios</button>
+    </div>
+    <form method="POST" action="{{ url_for('update_profile') }}">
+    <!-- Otros campos que ya tienes -->
+    <label for="city">Ciudad:</label>
+    <input type="text" id="city" name="city" value="{{ user.get('city', '') }}"><br><br>
+
+    <label for="birthplace">Lugar de nacimiento:</label>
+    <input type="text" id="birthplace" name="birthplace" value="{{ user.get('birthplace', '') }}"><br><br>
+
+    <label for="birthdate">Fecha de nacimiento:</label>
+    <input type="date" id="birthdate" name="birthdate" value="{{ user.get('birthdate', '') }}"><br><br>
+
+    <button type="submit">Guardar cambios</button>
+</form>
+
+    <script>
+        // Cargar datos actuales del perfil en el formulario de edición
+        document.getElementById('edit-username').value = localStorage.getItem('username') || '';
+        document.getElementById('edit-location').value = localStorage.getItem('location') || '';
+        document.getElementById('edit-description').value = localStorage.getItem('description') || '';
+
+        // Guardar cambios en el perfil
+        document.getElementById('save-profile-btn').addEventListener('click', function() {
+            const newUsername = document.getElementById('edit-username').value;
+            const newLocation = document.getElementById('edit-location').value;
+            const newDescription = document.getElementById('edit-description').value;
+
+            localStorage.setItem('username', newUsername);
+            localStorage.setItem('location', newLocation);
+            localStorage.setItem('description', newDescription);
+
+            alert('Perfil actualizado correctamente');
+            window.location.href = 'profile.html'; // Redirigir a la página de perfil después de guardar
+        });
+    </script>
+
+</body>
+</html>
